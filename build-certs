@@ -75,11 +75,6 @@ do
         esac
 done
 
-if [[ $EUID -eq 0 ]]; then
-        echo -e $RED "Run this script without the root user or the sudo command."
-        exit 1
-fi
-
 if [ -z "$COUNTRY" ]; then
 	echo -e $RED "Define a value for the country name."
 	exit 1

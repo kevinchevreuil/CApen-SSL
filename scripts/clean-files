@@ -5,8 +5,8 @@ set -e
 rm -f cacerts/*
 rm -f cacsr/*
 rm -f cakey/*
-rm -f cakey/.[^.]*
+rm -f cakey/.[^.key]*
 rm -f servercerts/*
 rm -f servercsr/*
 rm -f serverkeys/*
-rm -f serverkeys/.[^.]*
+rm -f serverkeys/.[^.key]*
