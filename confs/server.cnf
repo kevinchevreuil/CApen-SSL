@@ -1,0 +1,23 @@
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+nsCertType = server
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names
+
+[ req ]
+default_bits = 4096
+prompt = no
+default_md = sha512
+distinguished_name = dn
+
+[ dn ]
+C =
+ST =
+L =
+O =
+OU =
+CN =
+
+[alt_names]
+DNS.1 =

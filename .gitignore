@@ -1,0 +1,8 @@
+ca/*.crt
+certs/*.crt
+certs/*.pem
+csr/*.csr
+private/*.key
+database/certindex.old*
+database/certserial.old*
+database/certindex.attr.old*

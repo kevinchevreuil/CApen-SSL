@@ -1,0 +1,131 @@
+#!/bin/bash
+
+set -e
+
+RED='\e[1;31m'
+GREEN='\e[1;32m'
+
+export COUNTRY
+export PROVINCE
+export LOCALITY
+export ORGANIZATION
+export UNIT
+export DOMAIN
+export DAYS
+
+clean-confs() {
+[ -x ./scripts/clean-values ] && ./scripts/clean-values;tput init && exit 0
+}
+
+clean-database() {
+[ -x ./scripts/clean-database ] && ./scripts/clean-database;tput init && exit 0
+}
+
+clean-files() {
+[ -x ./scripts/clean-files ] && ./scripts/clean-files;tput init && exit 0
+}
+
+root() {
+ROOTCA=OK
+[ -x ./scripts/rootca ] && ./scripts/rootca;tput init && exit 0
+}
+
+intermediate() {
+INTERMEDIATECA=OK
+if [ ! -e ca/rootca.crt ] && [ ! -e ca/rootca.key ]; then
+        echo -e $RED "You must first create a certificate for the root authority."
+        exit 1
+fi
+
+[ -x ./scripts/intca ] && ./scripts/intca;tput init && exit 0
+}
+
+server() {
+SERVERCERT=OK
+[ -x ./scripts/clean-values ] && ./scripts/clean-values;tput init
+if [ ! -e ca/intca.crt ] && [ ! -e ca/intca.key ]; then
+        echo -e $RED "You must first create a certificate for the root authority and the intermediate autority."
+        exit 1
+fi
+
+[ -x ./scripts/servercert ] && ./scripts/servercert;tput init && exit 0
+}
+
+ARGS=$(getopt -o n:p:l:o:u:m:d:hcris -l country:,province:,locality:,organization:,unit:,domain:,days:,root,intermediate,server,help,clean-confs,clean-database,clean-files -- "$@")
+eval set -- "$ARGS"
+while true
+do
+        case "$1" in
+                -h|--help) help; ;;
+                -c|--clean-confs) clean-confs; ;;
+		-b|--clean-database) clean-database; ;;
+		-f|--clean-files) clean-files; ;;
+		-r|--root) root; ;;
+                -i|--intermediate) intermediate; ;;
+		-s|--server) server; ;;
+                -n|--country) COUNTRY=$2; shift 2; ;;
+                -p|--province) PROVINCE=$2; shift 2; ;;
+		-l|--locality) LOCALITY=$2; shift 2; ;;
+		-o|--organization) ORGANIZATION=$2; shift 2; ;;
+		-u|--unit) UNIT=$2; shift 2; ;;
+		-m|--domain) DOMAIN=$2; shift 2; ;;
+		-d|--days) DAYS=$2; shift 2; ;;
+                --) shift; break; ;;
+                 *) echo -e $RED "Internal error, unhandled option: $1"; exit 1; ;;
+        esac
+done
+
+if [[ $EUID -eq 0 ]]; then
+        echo -e $RED "Run this script without the root user or the sudo command."
+        exit 1
+fi
+
+if [ -z "$COUNTRY" ]; then
+	echo -e $RED "Define a value for the country name."
+	exit 1
+fi
+
+if [[ "$COUNTRY" != [A-Z][A-Z] ]]; then
+	echo -e $RED "The name of the country may not contain any characters other than two capital letters."
+	exit 1
+fi
+
+if [ -z "$PROVINCE" ]; then
+	echo -e $RED "Define a value for the state or the province name."
+	exit 1
+fi
+
+if [ -z "$LOCALITY" ]; then
+	echo -e $RED "Define a value for the name of the locality."
+	exit 1
+fi
+
+if [ -z "$ORGANIZATION" ]; then
+	echo -e $RED "Define a value for the name of your organization."
+	exit 1
+fi
+
+if [ -z "$UNIT" ]; then
+	echo -e $RED "Define a value for the name of your organizational unit."
+	exit 1
+fi
+
+if [ -z "$DOMAIN" ]; then
+	echo -e $RED "Define a value for the common name (FQDN or hostname)."
+	exit 1
+fi
+
+if [ -z "$DAYS" ]; then
+	echo -e $RED "Define a value for the duration of your certification autority or your server cert."
+	exit 1
+fi
+
+if [[ "$DAYS" != [0-9][0-9]?? ]]; then
+	echo -e $RED "The number of the certificate validity may not contain any characters other than two, three or four numbers."
+	exit 1
+fi
+
+if [ -z "$ROOTCA" ] && [ -z "$INTERMEDIATECA" ] && [ -z "$SERVERCERT" ]; then
+	echo -e $RED "You must define whether it's a root, intermediate authority or a server certificate."
+	exit 1
+fi

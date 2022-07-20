@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -e
+
+rm -f database/certindex.attr.old* database/certindex.old* database/certserial.old* database/certindex database/crlnumber*
+touch database/certindex database/crlnumber
+echo 1000 > database/certserial

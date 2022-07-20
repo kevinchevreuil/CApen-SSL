@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+rm -f ca/*
+rm -f certs/*
+rm -f private/*
+rm -f csr/*

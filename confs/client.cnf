@@ -1,0 +1,20 @@
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+nsCertType = client, email
+subjectKeyIdentifier = hash
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+extendedKeyUsage = clientAuth, emailProtection
+
+[ req ]
+default_bits = 4096
+prompt = no
+default_md = sha512
+distinguished_name = dn
+
+[ dn ]
+C =
+ST =
+L =
+O =
+OU =
+CN =
