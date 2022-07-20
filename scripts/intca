@@ -16,8 +16,8 @@ sed -i "s/OU =/OU = $UNIT/g" confs/ca.cnf
 sed -i "s/CN =/CN = $DOMAIN/g" confs/ca.cnf
 
 #Generate the private key
-openssl genrsa -out private/intca.key 4096
+openssl genrsa -out cakey/intca.key 4096
 #Generate the CSR
-openssl req -sha512 -new -subj "/C=$COUNTRY/ST=$PROVINCE/O=$ORGANIZATION/OU=$UNIT/L=$LOCALITY/CN=$DOMAIN" -key private/intca.key -out csr/intca.csr
+openssl req -sha512 -new -subj "/C=$COUNTRY/ST=$PROVINCE/O=$ORGANIZATION/OU=$UNIT/L=$LOCALITY/CN=$DOMAIN" -key cakey/intca.key -out cacsr/intca.csr
 #Generate the intermediate certificate
-openssl ca -batch -config confs/ca.cnf -days $DAYS -extensions v3_ca -subj "/C=$COUNTRY/ST=$PROVINCE/O=$ORGANIZATION/OU=$UNIT/L=$LOCALITY/CN=$DOMAIN" -notext -in csr/intca.csr -out ca/intca.crt
+openssl ca -batch -config confs/ca.cnf -days $DAYS -extensions v3_ca -subj "/C=$COUNTRY/ST=$PROVINCE/O=$ORGANIZATION/OU=$UNIT/L=$LOCALITY/CN=$DOMAIN" -notext -in cacsr/intca.csr -out cacerts/intca.crt

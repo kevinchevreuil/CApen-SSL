@@ -18,8 +18,8 @@ sed -i "s/CN =/CN = $DOMAIN/g" confs/server.cnf
 sed -i "s/DNS.1 =/DNS.1 = $DOMAIN/g" confs/server.cnf
 
 #Create a private key for the server cert
-openssl genrsa -out private/"$DOMAIN".key 4096
+openssl genrsa -out serverkeys/"$DOMAIN".key 4096
 #Create a CSR with the intermediate autority certificate
-openssl req -new -key private/"$DOMAIN".key -out csr/"$DOMAIN".csr -config confs/server.cnf
+openssl req -new -key serverkeys/"$DOMAIN".key -out servercsr/"$DOMAIN".csr -config confs/server.cnf
 #Sign the CSR with the intermediate autority certificate
-openssl x509 -req -in csr/"$DOMAIN".csr -CA ca/intca.crt -CAkey private/intca.key -CAcreateserial -out certs/"$DOMAIN".crt -days $DAYS -sha512 -extfile confs/server.cnf
+openssl x509 -req -in servercsr/"$DOMAIN".csr -CA cacerts/intca.crt -CAkey cakey/intca.key -CAcreateserial -out servercerts/"$DOMAIN".crt -days $DAYS -sha512 -extfile confs/server.cnf

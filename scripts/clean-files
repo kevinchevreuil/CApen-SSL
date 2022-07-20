@@ -2,7 +2,11 @@
 
 set -e
 
-rm -f ca/*
-rm -f certs/*
-rm -f private/*
-rm -f csr/*
+rm -f cacerts/*
+rm -f cacsr/*
+rm -f cakey/*
+rm -f cakey/.[^.]*
+rm -f servercerts/*
+rm -f servercsr/*
+rm -f serverkeys/*
+rm -f serverkeys/.[^.]*

@@ -1,8 +1,11 @@
-ca/*.crt
-certs/*.crt
-certs/*.pem
-csr/*.csr
-private/*.key
+cacerts/*.crt
+cacsr/*.crt
+cakey/*.key
+cakey/.key
+servercerts/*.crt
+servercsr/*.crt
+serverkeys/*.key
+serverkeys/.key
 database/certindex.old*
 database/certserial.old*
 database/certindex.attr.old*
