@@ -1,9 +1,10 @@
 #!/bin/bash
-
-set -e
+set -xe
 
 RED='\e[1;31m'
 GREEN='\e[1;32m'
+
+declare -x CALL_TO
 
 export COUNTRY
 export PROVINCE
@@ -57,12 +58,12 @@ while true
 do
         case "$1" in
                 -h|--help) help; ;;
-                -c|--clean-confs) clean-confs; ;;
-		-b|--clean-database) clean-database; ;;
-		-f|--clean-files) clean-files; ;;
-		-r|--root) root; ;;
-                -i|--intermediate) intermediate; ;;
-		-s|--server) server; ;;
+                -c|--clean-confs) CALL_TO='clean-confs'; shift; ;;
+		-b|--clean-database) CALL_TO='clean-database'; shift; ;;
+		-f|--clean-files) CALL_TO='clean-files'; shift; ;;
+		-r|--root) CALL_TO='root'; shift; ;;
+                -i|--intermediate) CALL_TO='intermediate'; shift; ;;
+		-s|--server) CALL_TO='server'; shift; ;;
                 -n|--country) COUNTRY=$2; shift 2; ;;
                 -p|--province) PROVINCE=$2; shift 2; ;;
 		-l|--locality) LOCALITY=$2; shift 2; ;;
@@ -124,3 +125,5 @@ if [ -z "$ROOTCA" ] && [ -z "$INTERMEDIATECA" ] && [ -z "$SERVERCERT" ]; then
 	echo -e $RED "You must define whether it's a root, intermediate authority or a server certificate."
 	exit 1
 fi
+
+eval '$CALL_TO'
