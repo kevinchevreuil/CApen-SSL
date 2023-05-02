@@ -4,6 +4,7 @@
 show-motd
 
 # Get the command line arguments
+CALL_TO=''
 ARGS=$(getopt -o "n:p:l:o:u:m:d:hcris" -l "country:,province:,locality:,organization:,unit:,domain:,days:,root,intermediate,server,help,clean-confs,clean-database,clean-files" -- "$@")
 eval set -- "$ARGS"
 while true
