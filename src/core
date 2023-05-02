@@ -1,0 +1,104 @@
+#!/bin/bash
+
+# Print the hello message
+show-motd
+
+# Get the command line arguments
+ARGS=$(getopt -o "n:p:l:o:u:m:d:hcris" -l "country:,province:,locality:,organization:,unit:,domain:,days:,root,intermediate,server,help,clean-confs,clean-database,clean-files" -- "$@")
+eval set -- "$ARGS"
+while true
+do
+		declare -i _shift=1
+
+        case "$1" in
+		-h|--help) help; ;;
+
+		-c|--clean-confs) CALL_TO='clean-confs'; ;;
+		-b|--clean-database) CALL_TO='clean-database'; ;;
+		-f|--clean-files) CALL_TO='clean-files'; ;;
+
+		-r|--root) ROOTCA=true; CALL_TO='root'; ;;
+		-i|--intermediate) INTERMEDIATECA=true; CALL_TO='intermediate'; ;;
+		-s|--server) SERVERCERT=true; CALL_TO='server'; ;;
+
+		-n|--country) COUNTRY=$2; ((_shift++)); ;;
+		-p|--province) PROVINCE=$2; ((_shift++)); ;;
+		-l|--locality) LOCALITY=$2; ((_shift++)); ;;
+		-o|--organization) ORGANIZATION=$2; ((_shift++)); ;;
+		-u|--unit) UNIT=$2; ((_shift++)); ;;
+		-m|--domain) DOMAIN=$2; ((_shift++)); ;;
+		-d|--days) DAYS=$2; ((_shift++)); ;;
+		--) break; ;;
+
+		*) fatal "Internal error, unhandled option: $1"; ;;
+        esac
+
+		shift $_shift
+done
+
+# Check the requirement
+if [ -z "$CALL_TO" ]; then 
+    error "You need to define an action"
+    help
+fi
+
+if [[ $CALL_TO =~ "clean-" ]]; then
+	declare -i CHECK_STATUS="$SUCCESS"
+
+	if [ -z "$COUNTRY" ]; then
+		((CHECK_STATUS++))
+		error "Define a value for the country name."
+	fi
+
+	if [[ "$COUNTRY" != [A-Z][A-Z] ]]; then
+		((CHECK_STATUS++))
+		error "The name of the country may not contain any characters other than two capital letters."
+	fi
+
+	if [ -z "$PROVINCE" ]; then
+		((CHECK_STATUS++))
+		error "Define a value for the state or the province name."
+	fi
+
+	if [ -z "$LOCALITY" ]; then
+		((CHECK_STATUS++))
+		error "Define a value for the name of the locality."
+	fi
+
+	if [ -z "$ORGANIZATION" ]; then
+		((CHECK_STATUS++))
+		error "Define a value for the name of your organization."
+	fi
+
+	if [ -z "$UNIT" ]; then
+		((CHECK_STATUS++))
+		error "Define a value for the name of your organizational unit."
+	fi
+
+	if [ -z "$DOMAIN" ]; then
+		((CHECK_STATUS++))
+		error "Define a value for the common name (FQDN or hostname)."
+	fi
+
+	if [ -z "$DAYS" ]; then
+		((CHECK_STATUS++))
+		error "Define a value for the duration of your certification autority or your server cert."
+	fi
+
+	if [[ "$DAYS" != [0-9][0-9]?? ]]; then
+		((CHECK_STATUS++))
+		error "The number of the certificate validity may not contain any characters other than two, three or four numbers."
+	fi
+
+	if [ -z "$ROOTCA" ] && [ -z "$INTERMEDIATECA" ] && [ -z "$SERVERCERT" ]; then
+		((CHECK_STATUS++))
+		error "You must define whether it's a root, intermediate authority or a server certificate."
+	fi
+
+	if [ $CHECK_STATUS -ne $SUCCESS ]; then 
+		fatal "Please fix there issues to continue"
+	fi
+fi
+
+# Let's take action
+eval '$CALL_TO'
