@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ -z "$BASE" ]; then
+	readonly BASE="${WORK_DIR:-./}"
+fi
+
 readonly DATABASE="${CASSL_DATABASE:-$BASE/database}"
 readonly CFG="${CASSL_CFG:-$BASE/confs}"
 
