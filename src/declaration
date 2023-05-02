@@ -1,0 +1,19 @@
+#!/bin/bash
+set -x
+
+declare -x CALL_TO
+
+declare -x DATABASE="${CASSL_DATABASE:-$BASE/database}"
+declare -x CFG="${CASSL_CFG:-$BASE/confs}"
+
+declare -x CAKEY="${CASSL_CAKEY:-$BASE/cakey}"
+declare -x CACSR="${CASSL_CACSR:-$BASE/cacsr}"
+declare -x CACRT="${CASSL_CACRT:-$BASE/cacerts}"
+
+declare -x SRVKEY="${CASSL_SRVKEY:-$BASE/serverkeys}"
+declare -x SRVCSR="${CASSL_SRVCSR:-$BASE/servercsr}"
+declare -x SRVCRT="${CASSL_SRVCRT:-$BASE/servercerts}"
+
+for f in "$DATABASE" "$CFG" "$CAKEY" "$CACSR" "$CACRT" "$SRVKEY" "$SRVCSR" "$SRVCRT"; do
+	mkdir -p "$f"
+done
