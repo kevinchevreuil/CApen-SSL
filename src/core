@@ -5,7 +5,7 @@ show-motd
 
 # Get the command line arguments
 CALL_TO=''
-ARGS=$(getopt -o "n:p:l:o:u:m:d:hcris" -l "country:,province:,locality:,organization:,unit:,domain:,days:,root,intermediate,server,help,clean-confs,clean-database,clean-files" -- "$@")
+ARGS=$(getopt -o "n:p:l:o:u:m:d:hriscbf" -l "country:,province:,locality:,organization:,unit:,domain:,days:,help,root,intermediate,server,clean-confs,clean-database,clean-files" -- "$@")
 eval set -- "$ARGS"
 while true
 do
@@ -43,7 +43,7 @@ if [ -z "$CALL_TO" ]; then
     help
 fi
 
-if [[ $CALL_TO =~ "clean-" ]]; then
+if [[ ! $CALL_TO = "clean-"* ]]; then
 	declare -i CHECK_STATUS="$SUCCESS"
 
 	if [ -z "$COUNTRY" ]; then
