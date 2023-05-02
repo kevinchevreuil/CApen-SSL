@@ -1,19 +1,30 @@
 #!/bin/bash
 
-set -e
+root() {
+    local _key="$CAKEY/rootca.key"
+    local _crt="$CACRT/rootca.crt"
+    local _cnf="$CFG/ca.cnf"
 
-sed -i "s/C = .*/C =/g" confs/ca.cnf
-sed -i "s/ST = .*/ST =/g" confs/ca.cnf
-sed -i "s/L = .*/L =/g" confs/ca.cnf
-sed -i "s/O = .*/O =/g" confs/ca.cnf
-sed -i "s/OU = .*/OU =/g" confs/ca.cnf
-sed -i "s/CN = .*/CN =/g" confs/ca.cnf
-sed -i "s/C =/C = $COUNTRY/g" confs/ca.cnf
-sed -i "s/ST =/ST = $PROVINCE/g" confs/ca.cnf
-sed -i "s/L =/L = $LOCALITY/g" confs/ca.cnf
-sed -i "s/O =/O = $ORGANIZATION/g" confs/ca.cnf
-sed -i "s/OU =/OU = $UNIT/g" confs/ca.cnf
-sed -i "s/CN =/CN = $DOMAIN/g" confs/ca.cnf
+    sed -i "s/C = .*/C =/g" "$CFG/ca.cnf"
+    sed -i "s/ST = .*/ST =/g" "$CFG/ca.cnf"
+    sed -i "s/L = .*/L =/g" "$CFG/ca.cnf"
+    sed -i "s/O = .*/O =/g" "$CFG/ca.cnf"
+    sed -i "s/OU = .*/OU =/g" "$CFG/ca.cnf"
+    sed -i "s/CN = .*/CN =/g" "$CFG/ca.cnf"
+    sed -i "s/C =/C = $COUNTRY/g" "$CFG/ca.cnf"
+    sed -i "s/ST =/ST = $PROVINCE/g" "$CFG/ca.cnf"
+    sed -i "s/L =/L = $LOCALITY/g" "$CFG/ca.cnf"
+    sed -i "s/O =/O = $ORGANIZATION/g" "$CFG/ca.cnf"
+    sed -i "s/OU =/OU = $UNIT/g" "$CFG/ca.cnf"
+    sed -i "s/CN =/CN = $DOMAIN/g" "$CFG/ca.cnf"
 
-#Create the autosigned the root autority certificate
-openssl req -x509 -nodes -newkey rsa:4096 -days $DAYS -extensions v3_ca -subj "/C=$COUNTRY/ST=$PROVINCE/O=$ORGANIZATION/OU=$UNIT/L=$LOCALITY/CN=$DOMAIN" -keyout cakey/rootca.key -out cacerts/rootca.crt -config confs/ca.cnf
+    #Create the autosigned the root autority certificate
+    if openssl req -x509 -nodes -newkey rsa:4096 -days "$DAYS" -extensions v3_ca -subj "/C=$COUNTRY/ST=$PROVINCE/O=$ORGANIZATION/OU=$UNIT/L=$LOCALITY/CN=$DOMAIN" -keyout "$_key" -out "$_crt" -config "$_cnf"; then
+        success "Autosigned root autority certificate"
+        echo "  Key:  $_key"
+        echo "  cert: $_crt"
+        echo "  Conf: $_cnf"
+    else
+        fatal "failing to create the autosigned root autority certificate"
+    fi
+}
