@@ -1,17 +1,17 @@
 #!/bin/bash
 
-set -e
-
-sed -i "s/C = .*/C =/g" confs/server.cnf
-sed -i "s/ST = .*/ST =/g" confs/server.cnf
-sed -i "s/L = .*/L =/g" confs/server.cnf
-sed -i "s/O = .*/O =/g" confs/server.cnf
-sed -i "s/OU = .*/OU =/g" confs/server.cnf
-sed -i "s/CN = .*/CN =/g" confs/server.cnf
-sed -i "s/DNS.1 = .*/DNS.1 =/g" confs/server.cnf
-sed -i "s/C = .*/C =/g" confs/ca.cnf
-sed -i "s/ST = .*/ST =/g" confs/ca.cnf
-sed -i "s/L = .*/L =/g" confs/ca.cnf
-sed -i "s/O = .*/O =/g" confs/ca.cnf
-sed -i "s/OU = .*/OU =/g" confs/ca.cnf
-sed -i "s/CN = .*/CN =/g" confs/ca.cnf
+clean-confs() {
+    sed -i "s/C = .*/C =/g" "$CFG/server.cnf"
+    sed -i "s/ST = .*/ST =/g" "$CFG/server.cnf"
+    sed -i "s/L = .*/L =/g" "$CFG/server.cnf"
+    sed -i "s/O = .*/O =/g" "$CFG/server.cnf"
+    sed -i "s/OU = .*/OU =/g" "$CFG/server.cnf"
+    sed -i "s/CN = .*/CN =/g" "$CFG/server.cnf"
+    sed -i "s/DNS.1 = .*/DNS.1 =/g" "$CFG/server.cnf"
+    sed -i "s/C = .*/C =/g" "$CFG/ca.cnf"
+    sed -i "s/ST = .*/ST =/g" "$CFG/ca.cnf"
+    sed -i "s/L = .*/L =/g" "$CFG/ca.cnf"
+    sed -i "s/O = .*/O =/g" "$CFG/ca.cnf"
+    sed -i "s/OU = .*/OU =/g" "$CFG/ca.cnf"
+    sed -i "s/CN = .*/CN =/g" "$CFG/ca.cnf"
+}

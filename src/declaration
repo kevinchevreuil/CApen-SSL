@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ -z "$BASE" ]; then
+	readonly BASE="${WORK_DIR:-./}"
+fi
+
+readonly DATABASE="${CASSL_DATABASE:-$BASE/database}"
+readonly CFG="${CASSL_CFG:-$BASE/confs}"
+
+readonly CAKEY="${CASSL_CAKEY:-$BASE/cakey}"
+readonly CACSR="${CASSL_CACSR:-$BASE/cacsr}"
+readonly CACRT="${CASSL_CACRT:-$BASE/cacerts}"
+
+readonly SRVKEY="${CASSL_SRVKEY:-$BASE/serverkeys}"
+readonly SRVCSR="${CASSL_SRVCSR:-$BASE/servercsr}"
+readonly SRVCRT="${CASSL_SRVCRT:-$BASE/servercerts}"

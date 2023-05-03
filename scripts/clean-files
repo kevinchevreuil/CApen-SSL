@@ -1,12 +1,12 @@
 #!/bin/bash
 
-set -e
-
-rm -f cacerts/*
-rm -f cacsr/*
-rm -f cakey/*
-rm -f cakey/.[^.key]*
-rm -f servercerts/*
-rm -f servercsr/*
-rm -f serverkeys/*
-rm -f serverkeys/.[^.key]*
+clean-files() {
+    rm -f "$CACRT/"*
+    rm -f "$CACSR/"*
+    rm -f "$CAKEY/"*
+    rm -f "$CAKEY/."[^.key]*
+    rm -f "$SRVCRT"/*
+    rm -f "$SRVCSR"/*
+    rm -f "$SRVKEY"/*
+    rm -f "$SRVKEY"/.[^.key]*
+}

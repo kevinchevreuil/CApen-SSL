@@ -1,25 +1,52 @@
 #!/bin/bash
 
-set -e
+server() {
+        local _key="$SRVKEY/$DOMAIN.key"
+        local _csr="$SRVCSR/$DOMAIN.csr"
+        local _crt="$SRVCRT/$DOMAIN.crt"
 
-sed -i "s/C = .*/C =/g" confs/server.cnf
-sed -i "s/ST = .*/ST =/g" confs/server.cnf
-sed -i "s/L = .*/L =/g" confs/server.cnf
-sed -i "s/O = .*/O =/g" confs/server.cnf
-sed -i "s/OU = .*/OU =/g" confs/server.cnf
-sed -i "s/CN = .*/CN =/g" confs/server.cnf
-sed -i "s/DNS.1 = .*/DNS.1 =/g" confs/server.cnf
-sed -i "s/C =/C = $COUNTRY/g" confs/server.cnf
-sed -i "s/ST =/ST = $PROVINCE/g" confs/server.cnf
-sed -i "s/L =/L = $LOCALITY/g" confs/server.cnf
-sed -i "s/O =/O = $ORGANIZATION/g" confs/server.cnf
-sed -i "s/OU =/OU = $UNIT/g" confs/server.cnf
-sed -i "s/CN =/CN = $DOMAIN/g" confs/server.cnf
-sed -i "s/DNS.1 =/DNS.1 = $DOMAIN/g" confs/server.cnf
+        # Clean configuration
+        clean-confs
 
-#Create a private key for the server cert
-openssl genrsa -out serverkeys/"$DOMAIN".key 4096
-#Create a CSR with the intermediate autority certificate
-openssl req -new -key serverkeys/"$DOMAIN".key -out servercsr/"$DOMAIN".csr -config confs/server.cnf
-#Sign the CSR with the intermediate autority certificate
-openssl x509 -req -in servercsr/"$DOMAIN".csr -CA cacerts/intca.crt -CAkey cakey/intca.key -CAcreateserial -out servercerts/"$DOMAIN".crt -days $DAYS -sha512 -extfile confs/server.cnf
+        if [ ! -e "$CACRT/intca.crt" ] && [ ! -e "$CACRT/intca.key" ]; then
+                fatal "You must first create a certificate for the root authority and the intermediate autority."
+        fi
+
+        sed -i "s/C = .*/C =/g" "$CFG/server.cnf"
+        sed -i "s/ST = .*/ST =/g" "$CFG/server.cnf"
+        sed -i "s/L = .*/L =/g" "$CFG/server.cnf"
+        sed -i "s/O = .*/O =/g" "$CFG/server.cnf"
+        sed -i "s/OU = .*/OU =/g" "$CFG/server.cnf"
+        sed -i "s/CN = .*/CN =/g" "$CFG/server.cnf"
+        sed -i "s/DNS.1 = .*/DNS.1 =/g" "$CFG/server.cnf"
+        sed -i "s/C =/C = $COUNTRY/g" "$CFG/server.cnf"
+        sed -i "s/ST =/ST = $PROVINCE/g" "$CFG/server.cnf"
+        sed -i "s/L =/L = $LOCALITY/g" "$CFG/server.cnf"
+        sed -i "s/O =/O = $ORGANIZATION/g" "$CFG/server.cnf"
+        sed -i "s/OU =/OU = $UNIT/g" "$CFG/server.cnf"
+        sed -i "s/CN =/CN = $DOMAIN/g" "$CFG/server.cnf"
+        sed -i "s/DNS.1 =/DNS.1 = $DOMAIN/g" "$CFG/server.cnf"
+
+        #Create a private key for the server cert
+        if openssl genrsa -out "$_key" 4096; then
+                success "Private key generated"
+        else
+                fatal "Fail to generate private key"
+        fi
+
+        #Create a CSR with the intermediate autority certificate
+        openssl req -new -key "$_key" -out "$_csr" -config "$CFG/server.cnf"
+        if openssl genrsa -out "$_key" 4096; then
+                success "Private key generated"
+        else
+                fatal "Fail to generate private key"
+        fi
+
+        #Sign the CSR with the intermediate autority certificate
+        openssl x509 -req -in "$_csr" -CA "$CACRT/intca.crt" -CAkey "$CAKEY/intca.key" -CAcreateserial -out "$SRVCRT/$DOMAIN.crt" -days "$DAYS" -sha512 -extfile "$CFG/server.cnf"
+        if openssl genrsa -out "$_key" 4096; then
+                success "Private key generated"
+        else
+                fatal "Fail to generate private key"
+        fi
+}

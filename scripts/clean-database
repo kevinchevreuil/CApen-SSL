@@ -1,7 +1,13 @@
 #!/bin/bash
 
-set -e
+clean-database() {
+    rm -f                           \
+    "$DATABASE/certindex.attr.old"* \
+    "$DATABASE/certindex.old"*      \
+    "$DATABASE/certserial.old"*     \
+    "$DATABASE/certindex"           \
+    "$DATABASE/crlnumber"*
 
-rm -f database/certindex.attr.old* database/certindex.old* database/certserial.old* database/certindex database/crlnumber*
-touch database/certindex database/crlnumber
-echo 1000 > database/certserial
+    touch "$DATABASE/certindex" "$DATABASE/crlnumber"
+    echo 1000 > "$DATABASE/certserial"
+}

@@ -1,0 +1,37 @@
+#!/bin/bash
+
+show-motd() {
+echo "
+╔═════════════════════════════════╗
+║ ░░░░░░░░░░ CApen-SSL ░░░░░░░░░░ ║
+╚═════════════════════════════════╝
+"
+}
+
+help() {
+  echo "Usage: $0 [OPTIONS]"
+  echo "Generate SSL certificates for your organization."
+  echo ""
+  echo "OPTIONS:"
+  echo "  -h, --help                  Show this help message and exit"
+  echo "  -c, --clean-confs           Remove all previous configurations"
+  echo "  -b, --clean-database        Remove all previous certificates and keys from the database"
+  echo "  -f, --clean-files           Remove all previously generated certificates and keys"
+  echo "  -r, --root                  Generate a root CA certificate"
+  echo "  -i, --intermediate          Generate an intermediate CA certificate"
+  echo "  -s, --server                Generate a server certificate"
+  echo "  -n, --country [value]       Specify the two-letter ISO code for your country"
+  echo "  -p, --province [value]      Specify the state or province where your organization is located"
+  echo "  -l, --locality [value]      Specify the city or locality where your organization is located"
+  echo "  -o, --organization [value]  Specify the legal name of your organization"
+  echo "  -u, --unit [value]          Specify the organizational unit within your organization"
+  echo "  -m, --domain [value]        Specify the fully-qualified domain name or hostname for your certificate"
+  echo "  -d, --days [value]          Specify the number of days for which the certificate will be valid"
+  echo ""
+  echo "EXAMPLES:"
+  echo "  $0 --root --country FR --province 'Ile-de-France' --locality Paris --organization FictOrg --unit Engineers --domain 'FicOrg ROOT CA' --days 3650"
+  echo "  $0 --intermediate --country FR --province 'Ile-de-France' --locality Paris --organization FictOrg --unit Engineers --domain 'FictOrg INT CA' --days 1825"
+  echo "  $0 --server --country FR --province 'Ile-de-France' --locality Paris --organization FictOrg --unit Engineers --domain 'test.test.lan' --days 365"
+
+  exit $FAILURE
+}
