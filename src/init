@@ -1,0 +1,79 @@
+#!/bin/bash
+
+for f in "$DATABASE" "$CFG" "$CAKEY" "$CACSR" "$CACRT" "$SRVKEY" "$SRVCSR" "$SRVCRT"; do
+	mkdir -p "$f" || fatal "Can't create dir '$f'"
+done
+
+init-file() {
+    if [ "$#" -ne 2 ];then
+        return $FAILURE
+    fi
+
+    touch "$2" || return  $FAILURE
+
+    local -i _state=0
+    while read -r line; do
+        if [ "$_state" -eq 0 ] && [ "$line" != "<<${1}_EOF" ]; then
+            continue
+        elif [ "$_state" -eq 1 ] && [ "$line" == "${1}_EOF" ]; then
+            break
+        fi
+
+        if [ "$_state" -eq 0 ]; then
+            _state=1
+            continue
+        fi
+
+        echo "$line" >> "$2" || return  $FAILURE
+    done <<<"$INIT_BUFFER"
+
+    return $SUCCESS
+}
+
+# Load init buffer
+INIT_BUFFER="$(cat "$(readlink -f -- "$0")")"
+
+# Populate confs
+if [ ! -s "$CFG/ca.cnf" ]; then
+    init-file "ca.cnf" "$CFG/ca.cnf" || fatal "Can't create ca.cnf"
+fi
+
+if [ ! -s "$CFG/client.cnf" ]; then
+    init-file "client.cnf" "$CFG/client.cnf" || fatal "Can't create client.cnf"
+fi
+
+if [ ! -s "$CFG/crl.conf" ]; then
+    init-file "crl.conf" "$CFG/crl.conf" || fatal "Can't create crl.conf"
+fi
+
+if [ ! -s "$CFG/csr.cnf" ]; then
+    init-file "csr.cnf" "$CFG/csr.cnf" || fatal "Can't create csr.cnf"
+fi
+
+if [ ! -s "$CFG/oscp.cnf" ]; then
+    init-file "oscp.cnf" "$CFG/oscp.cnf" || fatal "Can't create oscp.cnf"
+fi
+
+if [ ! -s "$CFG/server.cnf" ]; then
+    init-file "server.cnf" "$CFG/server.cnf" || fatal "Can't create server.cnf"
+fi
+
+# Populate database
+if [ ! -e "$DATABASE/certindex" ]; then
+    touch "$DATABASE/certindex" || fatal "Can't create certindex"
+fi
+
+if [ ! -s "$DATABASE/certindex.attr" ]; then
+    init-file "certindex.attr" "$DATABASE/certindex.attr" || fatal "Can't create certindex.attr"
+fi
+
+if [ ! -s "$DATABASE/certserial" ]; then
+    init "certserial" "$DATABASE/certserial" || fatal "Can't create certserial"
+fi
+
+if [ ! -e "$DATABASE/crlnumber" ]; then
+    touch "$DATABASE/crlnumber" || fatal "Can't create crlnumber"
+fi
+
+# Flush init buffer
+INIT_BUFFER=''
