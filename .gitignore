@@ -1,7 +1,6 @@
 cacerts/*.crt
 cacsr/*.crt
 cakey/*.key
-cakey/.key
 servercerts/*.crt
 servercsr/*.csr
 serverkeys/*.key
