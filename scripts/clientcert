@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -e
+
+sed -i "s/C = .*/C =/g" confs/client.cnf
+sed -i "s/ST = .*/ST =/g" confs/client.cnf
+sed -i "s/L = .*/L =/g" confs/client.cnf
+sed -i "s/O = .*/O =/g" confs/client.cnf
+sed -i "s/OU = .*/OU =/g" confs/client.cnf
+sed -i "s/CN = .*/CN =/g" confs/client.cnf
+sed -i "s/DNS.1 = .*/DNS.1 =/g" confs/client.cnf
+sed -i "s/C =/C = $COUNTRY/g" confs/client.cnf
+sed -i "s/ST =/ST = $PROVINCE/g" confs/client.cnf
+sed -i "s/L =/L = $LOCALITY/g" confs/client.cnf
+sed -i "s/O =/O = $ORGANIZATION/g" confs/client.cnf
+sed -i "s/OU =/OU = $UNIT/g" confs/client.cnf
+sed -i "s/CN =/CN = $DOMAIN/g" confs/client.cnf
+sed -i "s/DNS.1 =/DNS.1 = $DOMAIN/g" confs/client.cnf
+
+#Create a private key for the client cert
+openssl genrsa -out clientkeys/"$DOMAIN".key 4096
+#Create a CSR with the intermediate autority certificate
+openssl req -new -key clientkeys/"$DOMAIN".key -out clientcsr/"$DOMAIN".csr -config confs/client.cnf
+#Sign the CSR with the intermediate autority certificate
+openssl x509 -req -in clientcsr/"$DOMAIN".csr -CA cacerts/intca.crt -CAkey cakey/intca.key -CAcreateserial -out clientcerts/"$DOMAIN".crt -days $DAYS -sha512 -extfile confs/client.cnf

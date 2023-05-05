@@ -51,7 +51,18 @@ fi
 [ -x ./scripts/servercert ] && ./scripts/servercert;tput init && exit 0
 }
 
-ARGS=$(getopt -o n:p:l:o:u:m:d:hcris -l country:,province:,locality:,organization:,unit:,domain:,days:,root,intermediate,server,help,clean-confs,clean-database,clean-files -- "$@")
+client() {
+CLIENTCERT=OK
+[ -x ./scripts/clean-values ] && ./scripts/clean-values;tput init
+if [ ! -e cacerts/intca.crt ] && [ ! -e cacerts/intca.key ]; then
+        echo -e $RED "You must first create a certificate for the root authority and the intermediate autority."
+        exit 1
+fi
+
+[ -x ./scripts/clientcert ] && ./scripts/clientcert;tput init && exit 0
+}
+
+ARGS=$(getopt -o n:p:l:o:u:m:d:hcrisc -l country:,province:,locality:,organization:,unit:,domain:,days:,root,intermediate,server,client,help,clean-confs,clean-database,clean-files -- "$@")
 eval set -- "$ARGS"
 while true
 do
@@ -63,6 +74,7 @@ do
 		-r|--root) root; ;;
                 -i|--intermediate) intermediate; ;;
 		-s|--server) server; ;;
+		-t|--client) client; ;;
                 -n|--country) COUNTRY=$2; shift 2; ;;
                 -p|--province) PROVINCE=$2; shift 2; ;;
 		-l|--locality) LOCALITY=$2; shift 2; ;;
@@ -120,7 +132,7 @@ if [[ "$DAYS" != [0-9][0-9]?? ]]; then
 	exit 1
 fi
 
-if [ -z "$ROOTCA" ] && [ -z "$INTERMEDIATECA" ] && [ -z "$SERVERCERT" ]; then
+if [ -z "$ROOTCA" ] && [ -z "$INTERMEDIATECA" ] && [ -z "$SERVERCERT" ] && [ -z "$CLIENTCERT" ]; then
 	echo -e $RED "You must define whether it's a root, intermediate authority or a server certificate."
 	exit 1
 fi

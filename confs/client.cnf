@@ -12,9 +12,9 @@ default_md = sha512
 distinguished_name = dn
 
 [ dn ]
-C =
-ST =
-L =
-O =
-OU =
-CN =
+C = FR
+ST = Ile-de-France
+L = Paris
+O = Oren
+OU = Engineers
+CN = test.oren.lan

@@ -3,9 +3,11 @@ cacsr/*.crt
 cakey/*.key
 cakey/.key
 servercerts/*.crt
-servercsr/*.crt
+servercsr/*.csr
 serverkeys/*.key
-serverkeys/.key
+clientcerts/*.crt
+clientcsr/*.csr
+clientkeys/*.key
 database/certindex.old*
 database/certserial.old*
 database/certindex.attr.old*
