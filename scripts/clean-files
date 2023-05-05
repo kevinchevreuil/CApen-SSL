@@ -10,3 +10,7 @@ rm -f servercerts/*
 rm -f servercsr/*
 rm -f serverkeys/*
 rm -f serverkeys/.[^.key]*
+rm -f clientcerts/*
+rm -f clientcsr/*
+rm -f clientkeys/*
+rm -f clientkeys/.[^.key]*
