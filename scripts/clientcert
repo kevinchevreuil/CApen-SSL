@@ -18,8 +18,8 @@ sed -i "s/CN =/CN = $DOMAIN/g" confs/client.cnf
 sed -i "s/DNS.1 =/DNS.1 = $DOMAIN/g" confs/client.cnf
 
 #Create a private key for the client cert
-openssl genrsa -out clientkeys/"$DOMAIN".key 4096
+openssl genrsa -out out/client/keys/"$DOMAIN".key 4096
 #Create a CSR with the intermediate autority certificate
-openssl req -new -key clientkeys/"$DOMAIN".key -out clientcsr/"$DOMAIN".csr -config confs/client.cnf
+openssl req -new -key out/client/keys/"$DOMAIN".key -out out/client/csr/"$DOMAIN".csr -config confs/client.cnf
 #Sign the CSR with the intermediate autority certificate
-openssl x509 -req -in clientcsr/"$DOMAIN".csr -CA cacerts/intca.crt -CAkey cakey/intca.key -CAcreateserial -out clientcerts/"$DOMAIN".crt -days $DAYS -sha512 -extfile confs/client.cnf
+openssl x509 -req -in out/client/csr/"$DOMAIN".csr -CA out/ca/certs/intca.crt -CAkey out/ca/keys/intca.key -CAcreateserial -out out/client/certs/"$DOMAIN".crt -days $DAYS -sha512 -extfile confs/client.cnf

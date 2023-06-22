@@ -32,7 +32,7 @@ ROOTCA=OK
 
 intermediate() {
 INTERMEDIATECA=OK
-if [ ! -e cacerts/rootca.crt ] && [ ! -e cacerts/rootca.key ]; then
+if [ ! -e out/ca/certs/rootca.crt ] && [ ! -e out/ca/keys/rootca.key ]; then
         echo -e $RED "You must first create a certificate for the root authority."
         exit 1
 fi
@@ -43,7 +43,7 @@ fi
 server() {
 SERVERCERT=OK
 [ -x ./scripts/clean-values ] && ./scripts/clean-values;tput init
-if [ ! -e cacerts/intca.crt ] && [ ! -e cacerts/intca.key ]; then
+if [ ! -e out/ca/certs/intca.crt ] && [ ! -e out/ca/keys/intca.key ]; then
         echo -e $RED "You must first create a certificate for the root authority and the intermediate autority."
         exit 1
 fi
@@ -54,7 +54,7 @@ fi
 client() {
 CLIENTCERT=OK
 [ -x ./scripts/clean-values ] && ./scripts/clean-values;tput init
-if [ ! -e cacerts/intca.crt ] && [ ! -e cacerts/intca.key ]; then
+if [ ! -e out/ca/certs/intca.crt ] && [ ! -e out/ca/keys/intca.key ]; then
         echo -e $RED "You must first create a certificate for the root authority and the intermediate autority."
         exit 1
 fi

@@ -2,15 +2,15 @@
 
 set -e
 
-rm -f cacerts/*
-rm -f cacsr/*
-rm -f cakey/*
-rm -f cakey/.[^.key]*
-rm -f servercerts/*
-rm -f servercsr/*
-rm -f serverkeys/*
-rm -f serverkeys/.[^.key]*
-rm -f clientcerts/*
-rm -f clientcsr/*
-rm -f clientkeys/*
-rm -f clientkeys/.[^.key]*
+rm -f out/ca/certs/*
+rm -f out/ca/csr/*
+rm -f out/ca/keys/*
+rm -f out/ca/keys/.[^.key]*
+rm -f out/server/certs/*
+rm -f out/server/csr/*
+rm -f out/server/keys/*
+rm -f out/server/keys/.[^.key]*
+rm -f out/client/certs/*
+rm -f out/client/csr/*
+rm -f out/client/keys/*
+rm -f out/client/keys/.[^.key]*

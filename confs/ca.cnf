@@ -8,20 +8,20 @@ default_ca = CA_default
 [ CA_default ]
 # Directory and file locations.
 dir               = .
-certs             = $dir/cacerts
-crl_dir           = $dir/cacrl
-new_certs_dir     = $dir/cacerts
+certs             = $dir/out/ca/certs
+crl_dir           = $dir/out/ca/crl
+new_certs_dir     = $dir/out/ca/certs
 database          = $dir/database/certindex
 serial            = $dir/database/certserial
 RANDFILE          = $dir/private/.rand
 
 # The root key and root certificate.
-private_key       = $dir/cakey/rootca.key
-certificate       = $dir/cacerts/rootca.crt
+private_key       = $dir/out/ca/keys/rootca.key
+certificate       = $dir/out/ca/certs/rootca.crt
 
 # For certificate revocation lists.
 crlnumber         = $dir/database/crlnumber
-crl               = $dir/cacrl/rootca.crl.crt
+crl               = $dir/out/ca/crl/rootca.crl.crt
 crl_extensions    = crl_ext
 default_crl_days  = 30
 
