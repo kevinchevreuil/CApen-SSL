@@ -16,4 +16,4 @@ sed -i "s/OU =/OU = $UNIT/g" confs/ca.cnf
 sed -i "s/CN =/CN = $DOMAIN/g" confs/ca.cnf
 
 #Create the autosigned the root autority certificate
-openssl req -x509 -nodes -newkey rsa:4096 -days $DAYS -extensions v3_ca -subj "/C=$COUNTRY/ST=$PROVINCE/O=$ORGANIZATION/OU=$UNIT/L=$LOCALITY/CN=$DOMAIN" -keyout cakey/rootca.key -out cacerts/rootca.crt -config confs/ca.cnf
+openssl req -x509 -nodes -newkey rsa:4096 -days $DAYS -extensions v3_ca -subj "/C=$COUNTRY/ST=$PROVINCE/O=$ORGANIZATION/OU=$UNIT/L=$LOCALITY/CN=$DOMAIN" -keyout out/ca/keys/rootca.key -out out/ca/certs/rootca.crt -config confs/ca.cnf
