@@ -15,52 +15,52 @@ export DOMAIN
 export DAYS
 
 clean-confs() {
-[ -x ./scripts/clean-values ] && ./scripts/clean-values$RESET_COLOR && exit 0
+[ -x ./scripts/clean-values ] && ./scripts/clean-values $RESET_COLOR && exit 0
 }
 
 clean-database() {
-[ -x ./scripts/clean-database ] && ./scripts/clean-database$RESET_COLOR && exit 0
+[ -x ./scripts/clean-database ] && ./scripts/clean-database $RESET_COLOR && exit 0
 }
 
 clean-files() {
-[ -x ./scripts/clean-files ] && ./scripts/clean-files$RESET_COLOR && exit 0
+[ -x ./scripts/clean-files ] && ./scripts/clean-files $RESET_COLOR && exit 0
 }
 
 root() {
 ROOTCA=OK
-[ -x ./scripts/rootca ] && ./scripts/rootca$RESET_COLOR && exit 0
+[ -x ./scripts/rootca ] && ./scripts/rootca $RESET_COLOR && exit 0
 }
 
 intermediate() {
 INTERMEDIATECA=OK
 if [ ! -e out/ca/certs/rootca.crt ] && [ ! -e out/ca/keys/rootca.key ]; then
-        echo -e $RED "You must first create a certificate for the root authority."$RESET_COLOR
+        echo -e $RED "You must first create a certificate for the root authority." $RESET_COLOR
         exit 1
 fi
 
-[ -x ./scripts/intca ] && ./scripts/intca$RESET_COLOR && exit 0
+[ -x ./scripts/intca ] && ./scripts/intca $RESET_COLOR && exit 0
 }
 
 server() {
 SERVERCERT=OK
-[ -x ./scripts/clean-values ] && ./scripts/clean-values$RESET_COLOR
+[ -x ./scripts/clean-values ] && ./scripts/clean-values $RESET_COLOR
 if [ ! -e out/ca/certs/intca.crt ] && [ ! -e out/ca/keys/intca.key ]; then
-        echo -e $RED "You must first create a certificate for the root authority and the intermediate autority."$RESET_COLOR
+        echo -e $RED "You must first create a certificate for the root authority and the intermediate autority." $RESET_COLOR
         exit 1
 fi
 
-[ -x ./scripts/servercert ] && ./scripts/servercert$RESET_COLOR && exit 0
+[ -x ./scripts/servercert ] && ./scripts/servercert $RESET_COLOR && exit 0
 }
 
 client() {
 CLIENTCERT=OK
-[ -x ./scripts/clean-values ] && ./scripts/clean-values$RESET_COLOR
+[ -x ./scripts/clean-values ] && ./scripts/clean-values $RESET_COLOR
 if [ ! -e out/ca/certs/intca.crt ] && [ ! -e out/ca/keys/intca.key ]; then
-        echo -e $RED "You must first create a certificate for the root authority and the intermediate autority."$RESET_COLOR
+        echo -e $RED "You must first create a certificate for the root authority and the intermediate autority." $RESET_COLOR
         exit 1
 fi
 
-[ -x ./scripts/clientcert ] && ./scripts/clientcert$RESET_COLOR && exit 0
+[ -x ./scripts/clientcert ] && ./scripts/clientcert $RESET_COLOR && exit 0
 }
 
 ARGS=$(getopt -o n:p:l:o:u:m:d:hcrisc -l country:,province:,locality:,organization:,unit:,domain:,days:,root,intermediate,server,client,help,clean-confs,clean-database,clean-files -- "$@")
@@ -89,51 +89,51 @@ do
 done
 
 if [ -z "$COUNTRY" ]; then
-	echo -e $RED "Define a value for the country name."$RESET_COLOR
+	echo -e $RED "Define a value for the country name." $RESET_COLOR
 	exit 1
 fi
 
 if [[ "$COUNTRY" != [A-Z][A-Z] ]]; then
-	echo -e $RED "The name of the country may not contain any characters other than two capital letters."$RESET_COLOR
+	echo -e $RED "The name of the country may not contain any characters other than two capital letters." $RESET_COLOR
 	exit 1
 fi
 
 if [ -z "$PROVINCE" ]; then
-	echo -e $RED "Define a value for the state or the province name."$RESET_COLOR
+	echo -e $RED "Define a value for the state or the province name." $RESET_COLOR
 	exit 1
 fi
 
 if [ -z "$LOCALITY" ]; then
-	echo -e $RED "Define a value for the name of the locality."$RESET_COLOR
+	echo -e $RED "Define a value for the name of the locality." $RESET_COLOR
 	exit 1
 fi
 
 if [ -z "$ORGANIZATION" ]; then
-	echo -e $RED "Define a value for the name of your organization."$RESET_COLOR
+	echo -e $RED "Define a value for the name of your organization." $RESET_COLOR
 	exit 1
 fi
 
 if [ -z "$UNIT" ]; then
-	echo -e $RED "Define a value for the name of your organizational unit."$RESET_COLOR
+	echo -e $RED "Define a value for the name of your organizational unit." $RESET_COLOR
 	exit 1
 fi
 
 if [ -z "$DOMAIN" ]; then
-	echo -e $RED "Define a value for the common name (FQDN or hostname)."$RESET_COLOR
+	echo -e $RED "Define a value for the common name (FQDN or hostname)." $RESET_COLOR
 	exit 1
 fi
 
 if [ -z "$DAYS" ]; then
-	echo -e $RED "Define a value for the duration of your certification autority or your server cert."$RESET_COLOR
+	echo -e $RED "Define a value for the duration of your certification autority or your server cert." $RESET_COLOR
 	exit 1
 fi
 
 if [[ "$DAYS" != [0-9][0-9]?? ]]; then
-	echo -e $RED "The number of the certificate validity may not contain any characters other than two, three or four numbers."$RESET_COLOR
+	echo -e $RED "The number of the certificate validity may not contain any characters other than two, three or four numbers." $RESET_COLOR
 	exit 1
 fi
 
 if [ -z "$ROOTCA" ] && [ -z "$INTERMEDIATECA" ] && [ -z "$SERVERCERT" ] && [ -z "$CLIENTCERT" ]; then
-	echo -e $RED "You must define whether it's a root, intermediate authority or a server certificate."$RESET_COLOR
+	echo -e $RED "You must define whether it's a root, intermediate authority or a server certificate." $RESET_COLOR
 	exit 1
 fi
