@@ -39,7 +39,7 @@ if [ ! -e out/ca/certs/rootca.crt ] && [ ! -e out/ca/keys/rootca.key ]; then
 fi
 
 [ -x ./scripts/intca ] && ./scripts/intca $RESET_COLOR
-cat ./out/ca/certs/int.crt ./out/ca/certs/root.crt > ./out/ca/certs/ca-bundle.pem && exit 0
+cat ./out/ca/certs/intca.crt ./out/ca/certs/rootca.crt > ./out/ca/certs/ca-bundle.pem && exit 0
 }
 
 server() {
