@@ -69,7 +69,7 @@ DH=1
 openssl dhparam -out ./out/dhparams.pem 4096
 }
 
-ARGS=$(getopt -o hcbfr:i:s:t:en:p:l:o:u:m:d: -l help,clean-confs,clean-database,clean-files,root:,intermediate:,server:,client:,diffie-hellman,country:,province:,locality:,organization:,unit:,domain:,days: -- "$@")
+ARGS=$(getopt -o hcbfristen:p:l:o:u:m:d: -l help,clean-confs,clean-database,clean-files,root,intermediate,server,client,diffie-hellman,country:,province:,locality:,organization:,unit:,domain:,days: -- "$@")
 eval set -- "$ARGS"
 while true
 do
