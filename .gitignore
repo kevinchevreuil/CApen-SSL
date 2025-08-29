@@ -6,4 +6,4 @@ database/certserial.old*
 database/certindex.attr.old*
 .DS_Store
 .gitkeep-
-script.py
+out/dhparams.pem
